@@ -1,4 +1,5 @@
-# This script takes in an ascii file exported from a program using a proprietary file type.
+# This script takes in an ascii file exported from a program using a proprietary
+# file type.
 # It tidies up the data in a repeatable way.
 # It does this inside a function called clean.up.ascii.
 # Kathryn Busby
@@ -15,19 +16,25 @@ clean.up.ascii <- function(filename, notefile){
   
   # To be flexible, the user can type their filename in the variable 'filename'.
   # The file should be in the data folder.
-  # The file should have been exported from Expedata using the ASCII text file type, then .txt.
+  # The file should have been exported from Expedata using the ASCII text file
+  # type, then .txt.
   
   dir <- "~/Documents/Research/Xylocopa-CTmax/2020/Data"
   filepath <- file.path(dir, filename)
   notepath <- file.path(dir, notefile)
-  data.df = read.delim(filepath, header = TRUE, stringsAsFactors = FALSE, sep=",")
-  note.df = read.delim(notepath, header = FALSE, stringsAsFactors = FALSE)
+  data.df = read.delim(filepath, header = TRUE,
+                       stringsAsFactors = FALSE, sep=",")
+  note.df = read.delim(notepath, header = FALSE,
+                       stringsAsFactors = FALSE)
   
-  # note.df has a weird format. We need to search for a pattern to define where to delimit.
+  # note.df has a weird format. We need to search for a pattern to define where
+  # to delimit.
   # Each row of note.df should be examined as a separate string.
-  # The pattern it follows is that the row number is always listed at the beginning of the
+  # The pattern it follows is that the row number is always listed at the
+  # beginning of the
   # string. Then a batch of 2-7 integers. Then a space (or two).
-  # Beyond that pattern, the subsequent text should be considered a part of the next vector.
+  # Beyond that pattern, the subsequent text should be considered a part of the
+  # next vector.
   # Then we need to plop those vectors into a new dataframe.
   
   new.split <- strsplit(note.df, pattern = "^\d{2,8}\\s")
