@@ -38,6 +38,14 @@ clean.up.ascii <- function(filename, notefile){
     unite(col="Notes", -V1, remove=TRUE, sep=" ") %>%
     rename(Row = "V1")
   
+  # Wherever we have the word "Ramp", we should make that into a column called
+  # "Ramp" and put whatever follows it in that column.
+  
+  Ramp.vector <- str_extract(tidy.note$Notes, pattern=("amp\\s\\d"))
+  
+  tidy.note <- tidy.note %>%
+    add_column(Ramp = Ramp.vector)
+  
   # Next, we only want the relevant columns from the data df:
   # CO2, Oxygen, Aux1, Aux2.
   # We also want the data to be neat and labeled in a logical way.
