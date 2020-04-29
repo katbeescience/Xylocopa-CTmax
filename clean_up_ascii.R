@@ -50,8 +50,10 @@ clean.up.ascii <- function(filename, notefile){
   # Extract everything remaining that's not a single digit.
   
   tidy.note$Tube <- tidy.note$Notes 
-  tidy.note$Tube <- str_remove(tidy.note$Tube, pattern=pattern)
+  tidy.note$Tube <- str_remove(tidy.note$Tube, pattern=regex(pattern,
+                                ignore_case = TRUE))
   tidy.note$Tube <- str_remove_all(tidy.note$Tube, pattern=("\\D*"))
+
   
   # Next, we only want the relevant columns from the data df:
   # CO2, Oxygen, Aux1, Aux2.
@@ -86,6 +88,8 @@ clean.up.ascii <- function(filename, notefile){
               paste0("~/Documents/Research/Xylocopa-CTmax/2020/Data/tidydf_",filename),
               sep="\t",
               row.names=FALSE)
+  
+  return(tidy.df)
   
 }
 
