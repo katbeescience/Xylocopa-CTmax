@@ -6,14 +6,14 @@
 # mkbusby@email.arizona.edu
 # Script started April 15, 2020
 
-# Bring in libraries:
-
-library(tidyverse)
-
 # Start the function.
 
 clean.up.ascii <- function(filename, notefile){
+
+  # Bring in libraries:
   
+  library(tidyverse)
+    
   # To be flexible, the user can type their filename in the variable 'filename'.
   # The file should be in the data folder.
   # The file should have been exported from Expedata using the ASCII text file
@@ -45,7 +45,9 @@ clean.up.ascii <- function(filename, notefile){
   
   tidy.df <- data.df %>%
     select(FOXTemp_C, CO2_Percent, Aux2) %>%
-    filter(Aux2 >= 40) %>%
+    filter(Aux2 >= 40)
+  
+  tidy.df <- tidy.df %>%
     add_column(Row = c(1:nrow(tidy.df)))
   
   # We now want to tack tidy.note on to the end of tidy.df, but we want to line
@@ -65,3 +67,4 @@ clean.up.ascii <- function(filename, notefile){
   
 }
 
+clean.up.ascii(filename="06-19-2019.txt", notefile="Notes_06-19-2019.txt")
