@@ -3,7 +3,7 @@
 # mkbusby@email.arizona.edu
 # Script started April 15, 2020
 
-ggplot_tidydf <- function (filename) {
+ggplot_tidydf <- function (filename, notefile) {
 
 # Load pacakges.
   
@@ -12,14 +12,14 @@ ggplot_tidydf <- function (filename) {
   
   # Clean up the file and get it from clean_up_ascii.
   
-  tidy.df <- clean.up.ascii(filename) 
+  tidy.df <- clean.up.ascii(filename, notefile) 
 
 # Now make a plot.
 
 ggplot(data=tidy.df, mapping=aes(x=Aux2)) +
-  geom_line(aes(y=CO2_Percent))
-
+  geom_line(aes(y=CO2_Percent)) +
+  ylim(0,.05)
 
 }
 
-ggplot_tidydf(filename="06-19-2019_Redo.txt")
+ggplot_tidydf(filename="06-19-2019.txt", notefile="Notes_06-19-2019.txt")
