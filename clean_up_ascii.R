@@ -41,8 +41,8 @@ clean.up.ascii <- function(filename, notefile){
   # Wherever we have the word "Ramp", we should make that into a column called
   # "Ramp" and put whatever follows it in that column.
   
-  tidy.note$Ramp <- str_extract(tidy.note$Notes, pattern=("amp\\s\\d"))
-  tidy.note$Ramp <- gsub(tidy.note$Ramp, pattern="amp", replacement="Ramp")   
+  pattern <- c("\\dC | \\dc")
+  tidy.note$Ramp <- str_extract(tidy.note$Notes, pattern=pattern)
   
   # Tube column is a copy of Notes
   # Extract ramp info
@@ -50,7 +50,7 @@ clean.up.ascii <- function(filename, notefile){
   
   tidy.note$Tube <- tidy.note$Notes 
   tidy.note$Tube <- str_remove(tidy.note$Tube, pattern=("amp\\s\\d"))
-  tidy.note$Tube <- str_remove(tidy.note$Tube, pattern=("\\D*"))
+  tidy.note$Tube <- str_remove_all(tidy.note$Tube, pattern=("\\D*"))
   
   # Next, we only want the relevant columns from the data df:
   # CO2, Oxygen, Aux1, Aux2.
