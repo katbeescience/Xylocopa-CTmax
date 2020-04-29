@@ -74,13 +74,23 @@ clean.up.ascii <- function(filename, notefile){
   i <- 1
   tidy.df$Notes <- "NA"
   tidy.df$Ramp <- "NA"
+  tidy.df$Tube <- "NA"
   
   for (i in 1:nrow(tidy.note)) {
     index <- which(tidy.df$Row == tidy.note$Row[i])
     tidy.df$Notes[index] <- paste(tidy.note$Notes[i])
     tidy.df$Ramp[index] <-  paste(tidy.note$Ramp[i])
+    tidy.df$Tube[index] <-  paste(tidy.note$Tube[i])
     i <- i + 1
   }
+  
+  # We want to populate the Tube column with data going forward from
+  # the point where the last pre-existing specification was in the original data.
+  # So we should copy the contents of the previous cell, go down the list, and
+  # fill the subsequent empty cells with the pasted data. If the cell is not
+  # empty, then we should copy the new contents and start filling going down
+  # from that point.
+  
   
   # Save the resulting data in an output file.
   
