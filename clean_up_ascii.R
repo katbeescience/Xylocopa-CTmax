@@ -46,6 +46,8 @@ clean.up.ascii <- function(filename, notefile){
   tidy.note <- tidy.note %>%
     add_column(Ramp = Ramp.vector)
   
+  tidy.note$Ramp <- gsub(tidy.note$Ramp, pattern="amp", replacement="Ramp")
+  
   # Next, we only want the relevant columns from the data df:
   # CO2, Oxygen, Aux1, Aux2.
   # We also want the data to be neat and labeled in a logical way.
