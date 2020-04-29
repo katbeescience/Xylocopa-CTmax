@@ -45,10 +45,8 @@ clean.up.ascii <- function(filename, notefile){
   
   tidy.df <- data.df %>%
     select(FOXTemp_C, CO2_Percent, Aux2) %>%
-    filter(Aux2 >= 40)
-  
-  tidy.df <- tidy.df %>%
-    add_column(tidy.df, Row = c(1:nrow(tidy.df)))
+    filter(Aux2 >= 40) %>%
+    add_column(Row = c(1:nrow(tidy.df)))
   
   # We now want to tack tidy.note on to the end of tidy.df, but we want to line
   # them up by the values in Row. Wherever the values in Row are equal, that's
