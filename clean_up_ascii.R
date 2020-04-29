@@ -77,6 +77,11 @@ clean.up.ascii <- function(filename, notefile){
   
   # Save the resulting data in an output file.
   
+  write.table(tidy.df,
+              paste0("~/Documents/Research/Xylocopa-CTmax/2020/Data/tidydf_",filename),
+              sep="\t",
+              row.names=FALSE) 
+  
 }
 
 clean.up.ascii(filename="06-19-2019.txt", notefile="Notes_06-19-2019.txt")
