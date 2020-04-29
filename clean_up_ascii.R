@@ -64,14 +64,18 @@ clean.up.ascii <- function(filename, notefile){
   
   i <- 1
   tidy.df$Notes <- "NA"
+  tidy.df$Ramp <- "NA"
   
   for (i in 1:nrow(tidy.note)) {
     index <- which(tidy.df$Row == tidy.note$Row[i])
     tidy.df$Notes[index] <- paste(tidy.note$Notes[i])
+    tidy.df$Ramp[index] <-  paste(tidy.note$Ramp[i])
     i <- i + 1
   }
   
   return(tidy.df)
+  
+  # Save the resulting data in an output file.
   
 }
 
