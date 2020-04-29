@@ -75,14 +75,12 @@ clean.up.ascii <- function(filename, notefile){
     i <- i + 1
   }
   
-  return(tidy.df)
-  
   # Save the resulting data in an output file.
   
-  write.table(tidy.df,
+  write.table(tidy.df, file =
               paste0("~/Documents/Research/Xylocopa-CTmax/2020/Data/tidydf_",filename),
               sep="\t",
-              row.names=FALSE) 
+              row.names=FALSE)
   
 }
 
