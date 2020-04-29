@@ -22,36 +22,46 @@ clean.up.ascii <- function(filename, notefile){
   dir <- "~/Documents/Research/Xylocopa-CTmax/2020/Data"
   filepath <- file.path(dir, filename)
   notepath <- file.path(dir, notefile)
+  
+  # data.df will contain the data.
   data.df = read.delim(filepath, header = TRUE,
                        stringsAsFactors = FALSE, sep=",")
+  
+  # note.df will contain the notes. They should be tacked on to the data later.
+  # the weird formatting needs to be fixed, and the NAs removed.
+  
   note.df = read.delim(notepath, header = FALSE,
-                       stringsAsFactors = FALSE)
+                       stringsAsFactors = FALSE, sep=" ")
   
-  # note.df has a weird format. We need to search for a pattern to define where
-  # to delimit.
-  # Each row of note.df should be examined as a separate string.
-  # The pattern it follows is that the row number is always listed at the
-  # beginning of the
-  # string. Then a batch of 2-7 integers. Then a space (or two).
-  # Beyond that pattern, the subsequent text should be considered a part of the
-  # next vector.
-  # Then we need to plop those vectors into a new dataframe.
+  tidy.note <- note.df %>%
+    select(V1, V3:ncol(note.df)) %>%
+    unite(col="Notes", -V1, remove=TRUE, sep=" ") %>%
+    rename(Row = "V1")
   
-  new.split <- strsplit(note.df, pattern = "^\d{2,8}\\s")
-  
-  # Next, we only want the relevant columns: CO2, Oxygen, Aux1, Aux2.
+  # Next, we only want the relevant columns from the data df:
+  # CO2, Oxygen, Aux1, Aux2.
   # We also want the data to be neat and labeled in a logical way.
   # Tidyverse is good at this.
   
   tidy.df <- data.df %>%
     select(FOXTemp_C, CO2_Percent, Aux2) %>%
-    filter(Aux2 >= 40) %>%
+    filter(Aux2 >= 40)
+  
+  tidy.df <- tidy.df %>%
     add_column(tidy.df, Row = c(1:nrow(tidy.df)))
   
-  note.df <- note.df %>%
-    rename(Row=V1, Notes=V2)
+  # We now want to tack tidy.note on to the end of tidy.df, but we want to line
+  # them up by the values in Row. Wherever the values in Row are equal, that's
+  # where they should line up. This could be done in a for-loop.
   
-  tidy.df <- merge(tidy.df, note.df, by="Row")
+  i <- 1
+  tidy.df$Notes <- "NA"
+  
+  for (i in 1:nrow(tidy.note)) {
+    index <- which(tidy.df$Row == tidy.note$Row[i])
+    tidy.df$Notes[index] <- paste(tidy.note$Notes[i])
+    i <- i + 1
+  }
   
   return(tidy.df)
   
