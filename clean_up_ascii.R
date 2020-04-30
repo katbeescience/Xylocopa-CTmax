@@ -52,6 +52,12 @@ clean.up.ascii <- function(filename, notefile){
   tidy.note$Tube <- tidy.note$Notes 
   tidy.note$Tube <- str_remove(tidy.note$Tube, pattern=regex(pattern,
                                 ignore_case = TRUE))
+  
+  # Later on, we'll want to call the Baseline tube 0, to keep the tube column
+  # numeric only. So here we'll find all instances of "Baseline" in tidy.note
+  # and rename them 0.
+  
+  tidy.note$Tube[grep("Baseline",tidy.note$Tube, value = FALSE)] <- 0
   tidy.note$Tube <- str_remove_all(tidy.note$Tube, pattern=("\\D*"))
 
   
