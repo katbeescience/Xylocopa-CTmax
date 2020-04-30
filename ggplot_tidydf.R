@@ -25,8 +25,9 @@ tidy.plot <- ggplot(data=tidy.df, mapping=aes(x=Aux2)) +
   facet_wrap(tidy.df$Tube) +
   theme_classic()
 
-ggsave(path=file.path(dir, "Output"), filename=paste0("plot_",filename,".png"),
-       plot="tidy.plot", width=12, height=12, units="in")
+ggsave(filename=paste0("plot_",filename,".png"),
+       plot=tidy.plot, width=12, height=12, units="in",
+       path=file.path(dir, "Output/Figures"))
 
 return(tidy.plot)
 
