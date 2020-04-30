@@ -91,6 +91,16 @@ clean.up.ascii <- function(filename, notefile){
   # empty, then we should copy the new contents and start filling going down
   # from that point.
   
+  i <- 1
+  Tube.holder <- "Baseline"
+  
+  for (i in 1:nrow(tidy.df)) {
+    if (tidy.df$Tube[i] == "NA") {
+      tidy.df$Tube[i] = Tube.holder
+    } else {Tube.holder = tidy.df$Tube[i]
+    }
+    i <- i + 1
+  }
   
   # Save the resulting data in an output file.
   
