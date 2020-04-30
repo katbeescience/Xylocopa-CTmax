@@ -59,7 +59,6 @@ clean.up.ascii <- function(filename, notefile){
   
   tidy.note$Tube[grep("Baseline",tidy.note$Tube, value = FALSE)] <- 0
   tidy.note$Tube <- str_remove_all(tidy.note$Tube, pattern=("\\D*"))
-
   
   # Next, we only want the relevant columns from the data df:
   # CO2, Oxygen, Aux1, Aux2.
@@ -98,7 +97,7 @@ clean.up.ascii <- function(filename, notefile){
   # from that point.
   
   i <- 1
-  Tube.holder <- "Baseline"
+  Tube.holder <- "0"
   
   for (i in 1:nrow(tidy.df)) {
     if (tidy.df$Tube[i] == "NA") {
