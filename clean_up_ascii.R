@@ -117,8 +117,12 @@ clean.up.ascii <- function(filename, notefile){
 
     if (abs(tidy.df$CO2_Percent[i]-tidy.df$CO2_Percent[(i-1)]) < .0001) {
       new.tidy.df <- rbind(new.tidy.df,tidy.df[i,])
-      
     }
+    
+    # Just a counter. This for-loop takes way too long.
+    
+    if (i%%100 == 0) {
+      print(i)
   }
   
   # Save the resulting data in an output file.
