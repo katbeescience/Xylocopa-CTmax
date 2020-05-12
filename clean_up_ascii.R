@@ -122,7 +122,7 @@ clean.up.ascii <- function(filename, notefile){
     # Just a counter. This for-loop takes way too long.
     
     if (i%%100 == 0) {
-      print(paste0(i,"/",nrow(tidy.df))
+      paste0("For-loop status: ",i,"/",nrow(tidy.df))
     }
   }
   
