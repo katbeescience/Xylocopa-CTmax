@@ -123,6 +123,7 @@ clean.up.ascii <- function(filename, notefile){
     
     if (i%%100 == 0) {
       print(i)
+    }
   }
   
   # Save the resulting data in an output file.
