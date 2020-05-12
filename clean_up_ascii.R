@@ -68,6 +68,7 @@ clean.up.ascii <- function(filename, notefile){
   tidy.df <- data.df %>%
     select(FOXTemp_C, CO2_Percent, Aux2) %>%
     filter(Aux2 >= 40)
+    # filter(abs(CO2_Percent-lag(CO2_Percent,1) < .0001))
   
   tidy.df <- tidy.df %>%
     add_column(Row = c(1:nrow(tidy.df)))
@@ -118,22 +119,16 @@ clean.up.ascii <- function(filename, notefile){
     if (abs(tidy.df$CO2_Percent[i]-tidy.df$CO2_Percent[(i-1)]) < .0001) {
       new.tidy.df <- rbind(new.tidy.df,tidy.df[i,])
     }
-    
-    # Just a counter. This for-loop takes way too long.
-    
-    if (i%%100 == 0) {
-      paste0("For-loop status: ",i,"/",nrow(tidy.df))
-    }
   }
   
   # Save the resulting data in an output file.
   
-  write.table(new.tidy.df, file =
+  write.table(tidy.df, file =
               paste0("~/Documents/Research/Xylocopa-CTmax/2020/Data/tidydf_",filename),
               sep="\t",
               row.names=FALSE)
   
-  return(new.tidy.df)
+  return(tidy.df)
   
 }
 
