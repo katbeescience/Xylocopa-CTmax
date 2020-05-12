@@ -98,23 +98,37 @@ clean.up.ascii <- function(filename, notefile){
   
   i <- 1
   Tube.holder <- "0"
+  new.tidy.df <- data.frame("FOXTemp_C"=NA,
+                            "CO2_Percent"=NA,
+                            "Aux2"=NA,
+                            "Row"=NA,
+                            "Notes"=NA,
+                            "Ramp"=NA,
+                            "Tube"=NA)
   
   for (i in 1:nrow(tidy.df)) {
     if (tidy.df$Tube[i] == "NA") {
       tidy.df$Tube[i] = Tube.holder
     } else {Tube.holder = tidy.df$Tube[i]
     }
-    i <- i + 1
+    i <- i + 1    
+    
+    # This next line is meant to cull huge jumps in measured CO2.
+
+    if (abs(tidy.df$CO2_Percent[i]-tidy.df$CO2_Percent[(i-1)]) < .0001) {
+      new.tidy.df <- rbind(new.tidy.df,tidy.df[i,])
+      
+    }
   }
   
   # Save the resulting data in an output file.
   
-  write.table(tidy.df, file =
+  write.table(new.tidy.df, file =
               paste0("~/Documents/Research/Xylocopa-CTmax/2020/Data/tidydf_",filename),
               sep="\t",
               row.names=FALSE)
   
-  return(tidy.df)
+  return(new.tidy.df)
   
 }
 
