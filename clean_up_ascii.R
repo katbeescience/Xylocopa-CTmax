@@ -68,11 +68,15 @@ clean.up.ascii <- function(filename, notefile){
   tidy.df <- data.df %>%
     select(FOXTemp_C, CO2_Percent, Aux2) %>%
     filter(Aux2 >= 40)
-    # filter(abs(CO2_Percent-lag(CO2_Percent,1) < .0001))
+    # filter(CO2_Percent(abs(CO2_Percent-lag(CO2_Percent,1)) < .0001))
   
   tidy.df <- tidy.df %>%
     add_column(Row = c(1:nrow(tidy.df)))
   
+  # tidy.df <- tidy.df[which
+  #                    (abs
+  #                      (tidy.df$CO2_Percent-lag(tidy.df$CO2_Percent,1)) < .0001),]
+  # 
   # We now want to tack tidy.note on to the end of tidy.df, but we want to line
   # them up by the values in Row. Wherever the values in Row are equal, that's
   # where they should line up. This could be done in a for-loop.
@@ -99,13 +103,13 @@ clean.up.ascii <- function(filename, notefile){
   
   i <- 1
   Tube.holder <- "0"
-  new.tidy.df <- data.frame("FOXTemp_C"=NA,
-                            "CO2_Percent"=NA,
-                            "Aux2"=NA,
-                            "Row"=NA,
-                            "Notes"=NA,
-                            "Ramp"=NA,
-                            "Tube"=NA)
+  #new.tidy.df <- data.frame("FOXTemp_C"=NA,
+                            # "CO2_Percent"=NA,
+                            # "Aux2"=NA,
+                            # "Row"=NA,
+                            # "Notes"=NA,
+                            # "Ramp"=NA,
+                            # "Tube"=NA)
   
   for (i in 1:nrow(tidy.df)) {
     if (tidy.df$Tube[i] == "NA") {
@@ -115,20 +119,23 @@ clean.up.ascii <- function(filename, notefile){
     i <- i + 1    
     
     # This next line is meant to cull huge jumps in measured CO2.
-
+    
     if (abs(tidy.df$CO2_Percent[i]-tidy.df$CO2_Percent[(i-1)]) < .0001) {
       new.tidy.df <- rbind(new.tidy.df,tidy.df[i,])
     }
   }
   
+  #make new column where you start on row 2
+  #if abs(row 2-row1) < .0001, then a new data frame contains that row.
+  
   # Save the resulting data in an output file.
   
-  write.table(tidy.df, file =
+  write.table(new.tidy.df, file =
               paste0("~/Documents/Research/Xylocopa-CTmax/2020/Data/tidydf_",filename),
               sep="\t",
               row.names=FALSE)
   
-  return(tidy.df)
+  return(new.tidy.df)
   
 }
 
