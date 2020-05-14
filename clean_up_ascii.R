@@ -71,7 +71,9 @@ clean.up.ascii <- function(filename, notefile){
     # filter(CO2_Percent(abs(CO2_Percent-lag(CO2_Percent,1)) < .0001))
   
   tidy.df <- tidy.df %>%
-    add_column(Row = c(1:nrow(tidy.df)))
+    add_column(Row = c(1:nrow(tidy.df)),
+               Life_Stage = NA,
+               Run = rep(filename, times=nrow(tidy.df)))
   
   # tidy.df <- tidy.df[which
   #                    (abs
@@ -103,26 +105,32 @@ clean.up.ascii <- function(filename, notefile){
   
   i <- 1
   Tube.holder <- "0"
-  #new.tidy.df <- data.frame("FOXTemp_C"=NA,
-                            # "CO2_Percent"=NA,
-                            # "Aux2"=NA,
-                            # "Row"=NA,
-                            # "Notes"=NA,
-                            # "Ramp"=NA,
-                            # "Tube"=NA)
-  
+
   for (i in 1:nrow(tidy.df)) {
-    if (tidy.df$Tube[i] == "NA") {
+    if (tidy.df$Tube[i] == "NA" | tidy.df$Tube[i] == "") {
       tidy.df$Tube[i] = Tube.holder
     } else {Tube.holder = tidy.df$Tube[i]
     }
-    i <- i + 1    
+    i <- i + 1
+  }
     
     # This next line is meant to cull huge jumps in measured CO2.
     
-    if (abs(tidy.df$CO2_Percent[i]-tidy.df$CO2_Percent[(i-1)]) < .0001) {
+  i <- 2
+  new.tidy.df <- data.frame("FOXTemp_C"=NA,
+                            "CO2_Percent"=NA,
+                            "Aux2"=NA,
+                            "Row"=NA,
+                            "Notes"=NA,
+                            "Ramp"=NA,
+                            "Tube"=NA)
+  
+  for (i in 2:nrow(tidy.df)) {
+    if ((abs(as.numeric(tidy.df$CO2_Percent[i])
+             - as.numeric(tidy.df$CO2_Percent[(i-1)]))) < .0001) {
       new.tidy.df <- rbind(new.tidy.df,tidy.df[i,])
     }
+    i <- i + 1
   }
   
   #make new column where you start on row 2
@@ -139,4 +147,4 @@ clean.up.ascii <- function(filename, notefile){
   
 }
 
-clean.up.ascii(filename="06-19-2019.txt", notefile="Notes_06-19-2019.txt")
+clean.up.ascii(filename="20190601_001-Data.txt", notefile="20190601_001-Notes.txt")
