@@ -59,6 +59,7 @@ clean.up.ascii <- function(filename, notefile){
   
   tidy.note$Tube[grep("Baseline",tidy.note$Tube, value = FALSE)] <- 0
   tidy.note$Tube <- str_remove_all(tidy.note$Tube, pattern=("\\D*"))
+  tidy.note$Tube <- as.numeric(tidy.note$Tube)
   
   # Next, we only want the relevant columns from the data df:
   # CO2, Oxygen, Aux1, Aux2.
@@ -72,8 +73,17 @@ clean.up.ascii <- function(filename, notefile){
   
   tidy.df <- tidy.df %>%
     add_column(Row = c(1:nrow(tidy.df)),
+               Run = rep(filename, times=nrow(tidy.df)),
+               Tube = NA,
                Life_Stage = NA,
-               Run = rep(filename, times=nrow(tidy.df)))
+               Ramp = NA,
+               Notes = NA) %>%
+    mutate_at(vars(Row, Tube, CO2_Percent, Aux2, FOXTemp_C),
+              ~as.numeric(as.character(.))) 
+  
+  
+  head(tidy.df)
+  class(tidy.df$Tube)
   
   # tidy.df <- tidy.df[which
   #                    (abs
@@ -84,15 +94,12 @@ clean.up.ascii <- function(filename, notefile){
   # where they should line up. This could be done in a for-loop.
   
   i <- 1
-  tidy.df$Notes <- "NA"
-  tidy.df$Ramp <- "NA"
-  tidy.df$Tube <- "NA"
   
   for (i in 1:nrow(tidy.note)) {
     index <- which(tidy.df$Row == tidy.note$Row[i])
-    tidy.df$Notes[index] <- paste(tidy.note$Notes[i])
-    tidy.df$Ramp[index] <-  paste(tidy.note$Ramp[i])
-    tidy.df$Tube[index] <-  paste(tidy.note$Tube[i])
+    tidy.df$Notes[index] <- tidy.note$Notes[i]
+    tidy.df$Ramp[index] <-  tidy.note$Ramp[i]
+    tidy.df$Tube[index] <-  tidy.note$Tube[i]
     i <- i + 1
   }
   
@@ -107,7 +114,7 @@ clean.up.ascii <- function(filename, notefile){
   Tube.holder <- "0"
 
   for (i in 1:nrow(tidy.df)) {
-    if (tidy.df$Tube[i] == "NA" | tidy.df$Tube[i] == "") {
+    if (is.na(tidy.df$Tube[i])) {
       tidy.df$Tube[i] = Tube.holder
     } else {Tube.holder = tidy.df$Tube[i]
     }
@@ -121,9 +128,11 @@ clean.up.ascii <- function(filename, notefile){
                             "CO2_Percent"=NA,
                             "Aux2"=NA,
                             "Row"=NA,
-                            "Notes"=NA,
+                            "Run"=NA,
+                            "Tube"=NA,
+                            "Life_Stage"=NA,
                             "Ramp"=NA,
-                            "Tube"=NA)
+                            "Notes"=NA)
   
   for (i in 2:nrow(tidy.df)) {
     if ((abs(as.numeric(tidy.df$CO2_Percent[i])
