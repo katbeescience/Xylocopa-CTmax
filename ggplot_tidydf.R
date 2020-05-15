@@ -16,7 +16,7 @@ ggplot_tidydf <- function (filename) {
   find.file <- file.path(dir, "Data", paste0(filename,".txt"))
   tidy.df <- read.delim(find.file)
   tidy.df <- tidy.df %>%
-    filter(Tube == "2" | Tube == "3" | Tube == "4" | Tube == "5")
+    filter(Tube == 2 | Tube == 3 | Tube == 4 | Tube == 5)
 
 # Now make a plot.
 
@@ -26,6 +26,7 @@ tidy.plot <- ggplot(data=tidy.df, mapping=aes(x=Aux2)) +
   labs(x="Temperature (C, Aux2)", y="CO2 Percent",
        title=paste0("Plot of data in file: ", filename)) +
   facet_wrap(tidy.df$Tube) +
+  annotate("text", x=42, y=.01, label=tidy.df$Life_Stage) +
   theme_classic()
 
 ggsave(filename=paste0("plot_",filename,".png"),
@@ -36,4 +37,4 @@ return(tidy.plot)
 
 }
 
-ggplot_tidydf(filename="tidydf_06-19-2019")
+ggplot_tidydf(filename="tidydf_20190601_001-Data")
