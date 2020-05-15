@@ -142,6 +142,29 @@ clean.up.ascii <- function(filename, notefile){
     i <- i + 1
   }
   
+i <- 2
+new.tidy.df$Nest <- NA
+
+for (i in 2:nrow(new.tidy.df)) {  
+  if (new.tidy.df$Tube[i] == 0){
+    new.tidy.df$Life_Stage[i] <- "Baseline"
+    } else if (new.tidy.df$Tube[i] == 2){
+      new.tidy.df$Life_Stage[i] <- tube.2
+      new.tidy.df$Nest[i] <- Nest.2
+    } else if (new.tidy.df$Tube[i] == 3){
+      new.tidy.df$Life_Stage[i] <- tube.3
+      new.tidy.df$Nest[i] <- Nest.3
+    } else if (new.tidy.df$Tube[i] == 4){
+      new.tidy.df$Life_Stage[i] <- tube.4
+      new.tidy.df$Nest[i] <- Nest.4
+    } else if (new.tidy.df$Tube[i] == 5){
+      new.tidy.df$Life_Stage[i] <- tube.5
+      new.tidy.df$Nest[i] <- Nest.5
+    }
+  i <- i + 1
+}
+  
+  
   #make new column where you start on row 2
   #if abs(row 2-row1) < .0001, then a new data frame contains that row.
   
@@ -156,4 +179,15 @@ clean.up.ascii <- function(filename, notefile){
   
 }
 
+
 clean.up.ascii(filename="20190601_001-Data.txt", notefile="20190601_001-Notes.txt")
+
+tube.2 <- "Prepupa"
+tube.3 <- "5th instar"
+tube.4 <- "5th instar"
+tube.5 <- "Small instar (1-4)"
+
+Nest.2 <- "20190528D1B"
+Nest.3 <- "20190528D1B"
+Nest.4 <- "20190528D1B"
+Nest.5 <- "20190528D1B"
